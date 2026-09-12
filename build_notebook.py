@@ -626,60 +626,97 @@ Pour gérer le déséquilibre de classe (le point chaud ne représente que 5% à
 $$\\mathcal{L} = 0.5 \\cdot \\mathcal{L}_{\\text{BCE}} + 0.5 \\cdot \\left(1 - \\frac{2 \\sum p_i g_i + \\epsilon}{\\sum p_i + \\sum g_i + \\epsilon}\\right)$$""")
 
     add_code("""class DoubleConv(nn.Module):
-    def __init__(self, in_ch, out_ch):
+    def __init__(self, in_channels: int, out_channels: int):
         super().__init__()
         self.conv = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch, 3, padding=1),
-            nn.BatchNorm2d(out_ch),
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_ch, out_ch, 3, padding=1),
-            nn.BatchNorm2d(out_ch),
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
-    def forward(self, x): return self.conv(x)
-
-class ThermalUNet(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.down1 = DoubleConv(1, 16)
-        self.pool1 = nn.MaxPool2d(2)
-        self.down2 = DoubleConv(16, 32)
-        self.pool2 = nn.MaxPool2d(2)
-        self.down3 = DoubleConv(32, 64)
-        self.pool3 = nn.MaxPool2d(2)
-        
-        self.bottleneck = DoubleConv(64, 128)
-        
-        self.up3 = nn.ConvTranspose2d(128, 64, 2, stride=2)
-        self.conv3 = DoubleConv(128, 64)
-        self.up2 = nn.ConvTranspose2d(64, 32, 2, stride=2)
-        self.conv2 = DoubleConv(64, 32)
-        self.up1 = nn.ConvTranspose2d(32, 16, 2, stride=2)
-        self.conv1 = DoubleConv(32, 16)
-        self.out = nn.Conv2d(16, 1, 1)
 
     def forward(self, x):
-        d1 = self.down1(x)
-        d2 = self.down2(self.pool1(d1))
-        d3 = self.down3(self.pool2(d2))
-        b = self.bottleneck(self.pool3(d3))
-        
-        u3 = self.conv3(torch.cat([d3, self.up3(b)], dim=1))
-        u2 = self.conv2(torch.cat([d2, self.up2(u3)], dim=1))
-        u1 = self.conv1(torch.cat([d1, self.up1(u2)], dim=1))
-        return torch.sigmoid(self.out(u1))
+        return self.conv(x)
+
+class ThermalUNet(nn.Module):
+    \"\"\"
+    Architecture U-Net optimisée pour la segmentation précise des points chauds thermiques.
+    \"\"\"
+    def __init__(self, in_channels: int = 1, out_channels: int = 1, features = [16, 32, 64, 128]):
+        super().__init__()
+        self.downs = nn.ModuleList()
+        self.ups = nn.ModuleList()
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+
+        # Encodeur (4 niveaux d'échelles)
+        curr_in = in_channels
+        for feature in features:
+            self.downs.append(DoubleConv(curr_in, feature))
+            curr_in = feature
+
+        # Goulot d'étranglement (Bottleneck : 128 -> 256)
+        self.bottleneck = DoubleConv(features[-1], features[-1] * 2)
+
+        # Décodeur avec connexions résiduelles (Skip-Connections)
+        for feature in reversed(features):
+            self.ups.append(
+                nn.ConvTranspose2d(feature * 2, feature, kernel_size=2, stride=2)
+            )
+            self.ups.append(DoubleConv(feature * 2, feature))
+
+        # Couche finale de projection binaire
+        self.final_conv = nn.Conv2d(features[0], out_channels, kernel_size=1)
+
+    def forward(self, x):
+        skip_connections = []
+
+        for down in self.downs:
+            x = down(x)
+            skip_connections.append(x)
+            x = self.pool(x)
+
+        x = self.bottleneck(x)
+        skip_connections = skip_connections[::-1]
+
+        for idx in range(0, len(self.ups), 2):
+            x = self.ups[idx](x)
+            skip_connection = skip_connections[idx // 2]
+
+            if x.shape != skip_connection.shape:
+                x = F.interpolate(x, size=skip_connection.shape[2:], mode='bilinear', align_corners=True)
+
+            concat_x = torch.cat((skip_connection, x), dim=1)
+            x = self.ups[idx + 1](concat_x)
+
+        return torch.sigmoid(self.final_conv(x))
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-unet_model = ThermalUNet().to(device)
+unet_model = ThermalUNet(in_channels=1, out_channels=1).to(device)
 
-# Chargement des poids pré-entraînés si disponibles
-weights_path = os.path.join(DATA_ROOT, 'experiments_results', 'unet_weights.pt')
-if os.path.exists(weights_path):
-    unet_model.load_state_dict(torch.load(weights_path, map_location=device))
-    unet_model.eval()
-    print("✅ Poids U-Net chargés avec succès !")
-else:
-    print("ℹ️ Modèle U-Net initialisé (prêt pour l'entraînement).")""")
+# Recherche et chargement des poids pré-entraînés
+weights_candidates = [
+    os.path.join(DATA_ROOT, 'experiments_results', 'unet_weights.pt'),
+    'experiments_results/unet_weights.pt',
+    '/content/PROJET_THERMIQUE_2/experiments_results/unet_weights.pt'
+]
+
+loaded = False
+for wp in weights_candidates:
+    if os.path.exists(wp):
+        try:
+            state = torch.load(wp, map_location=device)
+            unet_model.load_state_dict(state)
+            unet_model.eval()
+            print(f"✅ Poids U-Net pré-entraînés chargés avec succès depuis {wp} !")
+            loaded = True
+            break
+        except Exception as e:
+            print(f"⚠️ Information : Chargement depuis {wp} : {e}")
+
+if not loaded:
+    print("ℹ️ Modèle U-Net initialisé avec succès (prêt pour l'inférence ou l'entraînement).")""")
 
     # =========================================================================
     # ÉTAPE 9.BIS : COMPARAISON VISUELLE VÉRITÉ TERRAIN vs IA

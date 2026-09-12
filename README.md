@@ -18,6 +18,8 @@ On dispose de trois canaux prêts à l'emploi :
 | **📓 Google Colab Pédagogique** | Notebook pas-à-pas documenté avec théorie, formules mathématiques et visualisations graphiques. | Ouvrir `Projet_Thermique_Induction_Motor_Colab.ipynb` dans Google Colab et cliquer sur **"Tout exécuter"** |
 | **🧪 Suite de Tests & Benchmark** | Validation rigoureuse des propriétés mathématiques et calcul des métriques croisées (Dice, IoU, AUROC, ECE, Délais). | `python run_all_tests.py`<br>`python src/evaluation/compare_axes.py` |
 
+Lien du depot github : https://github.com/scideloandriasahy-bot/PROJET_THERMIQUE_2
+Lien de la démo streamlit : https://projetthermique2-4alljlvrbmd6npmnzjjksq.streamlit.app
 ---
 
 ## 🗂️ Structure et Organisation du Projet

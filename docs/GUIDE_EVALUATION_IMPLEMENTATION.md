@@ -9,6 +9,9 @@ Ce document a été rédigé pour vous permettre d'évaluer rapidement le travai
 
 ## 🧭 1. Où Trouver Quoi ? (Cartographie du Travail)
 
+Lien du depot github : https://github.com/scideloandriasahy-bot/PROJET_THERMIQUE_2
+Lien de la démo streamlit : https://projetthermique2-4alljlvrbmd6npmnzjjksq.streamlit.app
+
 | Ce que vous souhaitez examiner | Emplacement dans le projet | Description |
 | :--- | :--- | :--- |
 | **Démonstration Visuelle & Décision** | `src/app/app.py` *(ou lien Streamlit en ligne: https://projetthermique2-4alljlvrbmd6npmnzjjksq.streamlit.app)* | Visualisation des masques, cartes de concordance avec vos vérités terrain, courbes de santé et alertes. |

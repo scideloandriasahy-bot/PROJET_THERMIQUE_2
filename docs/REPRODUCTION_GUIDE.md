@@ -1,5 +1,7 @@
 # Guide de Reproduction - Projet Détection et Suivi d'Anomalies Thermiques
 
+Lien du depot github : https://github.com/scideloandriasahy-bot/PROJET_THERMIQUE_2
+Lien de la démo streamlit : https://projetthermique2-4alljlvrbmd6npmnzjjksq.streamlit.app
 Ce guide permet de reproduire l'intégralité des expérimentations, d'exécuter la suite de tests unitaires, de relancer le benchmark comparatif et de démarrer le démonstrateur interactif sous Streamlit.
 
 ---
