@@ -50,7 +50,7 @@ PROJET_THERMIQUE_2/
 │       └── app.py                    # Démonstrateur interactif complet sous Streamlit
 ├── tests/                            # Suite complète de tests unitaires
 ├── docs/
-│   ├── RAPPORT_FINAL.md              # Rapport technique et scientifique complet
+│   ├── GUIDE_EVALUATION_IMPLEMENTATION.md              # Guide pour l'evaluation et la demonstration
 │   └── REPRODUCTION_GUIDE.md         # Le présent guide
 ├── run_all_tests.py                  # Exécuteur unifié des tests unitaires
 └── requirements.txt

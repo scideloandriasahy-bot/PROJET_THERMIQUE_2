@@ -1,6 +1,6 @@
 # 🔥 Surveillance Thermique Prédictive & Diagnostic d'Anomalies sur Moteurs Asynchrones
 
-Projet académique et industriel d'analyse d'images thermiques infrarouges pour la maintenance prédictive et la détection précoce des défaillances de moteurs asynchrones triphasés (1.11 kW, 2800 tr/min).
+Projet académique, Stage et industriel d'analyse d'images thermiques infrarouges pour la maintenance prédictive et la détection précoce des défaillances de moteurs asynchrones triphasés (1.11 kW, 2800 tr/min).
 
 Ce projet met en œuvre, compare et valide deux approches méthodologiques complémentaires conformément au cahier des charges :
 1. **Axe 1 (Modèles Graphiques Probabilistes Interprétables) :** Champ Aléatoire de Markov (**MRF**) avec modèle de Potts et optimisation **ICM**, extraction de descripteurs physiques explicables, suivi stochastique par Modèle de Markov Caché (**HMM**) et anticipation du risque d'avarie par **Chaîne de Markov Absorbante** (matrice fondamentale $N = (I - Q)^{-1}$).
@@ -8,13 +8,13 @@ Ce projet met en œuvre, compare et valide deux approches méthodologiques compl
 
 ---
 
-## 🚀 Accès Rapide & Démonstration pour l'Encadrant et le Professeur
+## 🚀 Accès Rapide & Démonstration 
 
-Pour évaluer ce projet, vous disposez de trois canaux prêts à l'emploi :
+On dispose de trois canaux prêts à l'emploi :
 
 | Canal d'évaluation | Description | Comment l'utiliser |
 | :--- | :--- | :--- |
-| **🌐 Application Web Interactive (Streamlit)** | Interface graphique complète : visualisation multi-masques, vérité terrain expert, cartes de concordance pixel-par-pixel, trajectoires temporelles et explorateur de code source. | `streamlit run src/app/app.py` *(ou via le lien Streamlit Cloud hébergé)* |
+| **🌐 Application Web Interactive (Streamlit)** | Interface graphique complète : visualisation multi-masques, vérité terrain expert, cartes de concordance pixel-par-pixel, trajectoires temporelles et explorateur de code source. | `streamlit run src/app/app.py` *(ou via le lien Streamlit Cloud hébergé : https://projetthermique2-4alljlvrbmd6npmnzjjksq.streamlit.app)* |
 | **📓 Google Colab Pédagogique** | Notebook pas-à-pas documenté avec théorie, formules mathématiques et visualisations graphiques. | Ouvrir `Projet_Thermique_Induction_Motor_Colab.ipynb` dans Google Colab et cliquer sur **"Tout exécuter"** |
 | **🧪 Suite de Tests & Benchmark** | Validation rigoureuse des propriétés mathématiques et calcul des métriques croisées (Dice, IoU, AUROC, ECE, Délais). | `python run_all_tests.py`<br>`python src/evaluation/compare_axes.py` |
 
@@ -64,9 +64,8 @@ PROJET_THERMIQUE_2/
 │   └── benchmark_summary.json                 # Rapport JSON consolidé du benchmark croisé
 │
 ├── docs/                                      # Documentation académique détaillée
-│   ├── RAPPORT_FINAL.md                       # Rapport technique et scientifique complet
-│   ├── REPRODUCTION_GUIDE.md                  # Guide de reproduction des expériences
-│   └── GUIDE_HEBERGEMENT_ET_PARTAGE.md        # Guide pour héberger l'application web gratuitement
+│   ├── GUIDE_EVALUATION_IMPLEMENTATION.md     # Guide pour l'evaluation et la demonstration
+│   └── REPRODUCTION_GUIDE.md                  # Guide de reproduction des expériences
 │
 └── tests/                                     # Tests unitaires de validation
     ├── test_preprocessing.py                  # Vérifie le débruitage et l'isolation du fond
@@ -105,40 +104,10 @@ L'interface s'ouvre automatiquement dans votre navigateur à l'adresse `http://l
 python run_all_tests.py
 ```
 
----
-
-## 🌐 Hébergement de l'Application Web (Pour le Professeur et l'Encadrant)
-
-Pour que votre encadrant et votre professeur puissent tester l'application directement depuis leur navigateur sans installer Python :
-
-### Option 1 : Déploiement Gratuit sur Streamlit Community Cloud (Recommandé)
-1. Déposez ce projet sur votre compte **GitHub** (dépôt public ou privé).
-2. Rendez-vous sur [share.streamlit.io](https://share.streamlit.io) et connectez-vous avec votre compte GitHub.
-3. Cliquez sur **"New app"** :
-   - Sélectionnez votre dépôt GitHub (`PROJET_THERMIQUE_2`).
-   - Indiquez la branche : `main`.
-   - Indiquez le chemin du fichier principal : `src/app/app.py`.
-4. Cliquez sur **"Deploy"** !
-5. Vous obtenez une URL publique permanente (ex: `https://surveillance-moteur-thermique.streamlit.app`) que vous pouvez envoyer directement à votre encadrant et à votre professeur.
-
-### Option 2 : Partage Instantané par Tunnel Local (Depuis votre PC)
-Si vous souhaitez faire une démonstration en direct depuis votre machine :
-```bash
-# Dans un terminal, lancez Streamlit :
-streamlit run src/app/app.py
-
-# Dans un second terminal, partagez le port 8501 avec localtunnel :
-npx localtunnel --port 8501
-# ou avec cloudflared :
-# cloudflared tunnel --url http://localhost:8501
-```
-Vous obtenez immédiatement une URL sécurisée `https://...loca.lt` accessible par votre encadrant.
-
----
 
 ## 📊 Synthèse des Résultats Expérimentaux (Benchmark)
 
-Conformément à la section 8 du cahier des charges, les deux approches ont été évaluées de façon croisée :
+Les deux approches ont été évaluées de façon croisée :
 
 | Métrique d'Évaluation | Baseline (Otsu / RF) | Axe 1 : MRF + HMM + Markov Absorbant | Axe 2 : U-Net + HSMM + CNN Contextuel |
 | :--- | :---: | :---: | :---: |
@@ -158,7 +127,6 @@ Conformément à la section 8 du cahier des charges, les deux approches ont ét�
 
 ---
 
-## 👥 Auteurs & Encadrement
-- **Auteur :** Stagiaire Ingénieur / Étudiant Chercheur
-- **Structure d'accueil :** Smart Automation Technologies
+## 👥 Auteurs
+- **Auteur :** ANDRIASAHY Tsikomia Scidelo
 - **Projet :** Système Intelligent de Surveillance Thermique et Diagnostic Prédictif de Moteurs Électriques

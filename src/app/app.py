@@ -2,8 +2,7 @@
 Application Web Interactive Streamlit :
 Surveillance Thermique Prédictive & Diagnostic d'Anomalies pour Moteur à Induction
 
-Conçue pour présentation académique, démonstration industrielle et évaluation par jury/encadrant.
-Comprend :
+Conçue pour présentation  :
 1. Visualisation multi-masques & cartographie de concordance spatiale (Vérité Terrain vs IA).
 2. Trajectoires temporelles de santé (HMM filtré, HSMM persistant, Markov absorbant).
 3. Benchmark comparatif rigoureux selon le Cahier des Charges.
@@ -589,7 +588,7 @@ with tab_temporal:
 with tab_benchmark:
     st.subheader("📊 Résultats Comparatifs des Deux Axes Méthodologiques")
     st.markdown("""
-    Conformément à la **section 8 du Cahier des Charges**, les deux approches ont été évaluées de manière croisée et rigoureuse
+    Les deux approches ont été évaluées de manière croisée et rigoureuse
     sur les mêmes données d'évaluation, avec isolation stricte des machines et séquences (GroupKFold) pour empêcher toute fuite d'information.
     """)
 
@@ -681,7 +680,7 @@ with tab_methodology:
 with tab_code:
     st.subheader("💻 Explorateur Interactif du Code Source & Modules du Projet")
     st.markdown("""
-    Pour faciliter la revue de code par l'**encadrant industriel** et le **professeur**, 
+    Pour faciliter la revue de code , 
     cette interface permet d'inspecter directement l'implémentation complète des différents algorithmes,
     avec coloration syntaxique et documentation académique.
     """)
