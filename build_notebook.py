@@ -39,16 +39,16 @@ def create_notebook():
     # =========================================================================
     # EN-TÊTE
     # =========================================================================
-    add_md("""# 🎓 Projet Académique : Détection, Localisation et Suivi des Anomalies par Images Thermiques
+    add_md("""# 🎓 Projet Stage : Détection, Localisation et Suivi des Anomalies par Images Thermiques
 ### Modélisation Spatio-Temporelle Probabiliste (MRF, HMM, Chaînes Absorbantes, U-Net et HSMM)
 **Application :** Surveillance et Maintenance Prédictive de Moteurs Asynchrones Triphasés  
-**Auteur / Équipe :** Smart Automation Technologies & Laboratoire de Recherche  
-**Notebook Pédagogique Conçu pour Google Colab** (GPU optionnel mais recommandé pour U-Net)
+**Auteur :** ANDRIASAHY Tsikomia Scidelo
+**Notebook :** Idealement avec GPU 
 
 ---
 
 ### 🎯 Objectif Pédagogique de ce Notebook
-L'objectif de ce document interactif est de vous **enseigner pas à pas**, avec le formalisme mathématique, le code commenté et les visualisations graphiques :
+L'objectif de ce document interactif est de vous voir pas à pas, les etapes du projet avec les visualisations graphiques :
 1. **La physique du problème :** Pourquoi et comment un défaut électrique ou mécanique se manifeste sous forme de signature thermique.
 2. **Le prétraitement radiométrique :** Comment débruiter un thermogramme sans perdre la netteté des fronts thermiques.
 3. **L'Axe 1 (Modèles Graphiques Interprétables) :**
@@ -59,7 +59,7 @@ L'objectif de ce document interactif est de vous **enseigner pas à pas**, avec 
 4. **L'Axe 2 (Approche Profonde Spatio-Temporelle) :**
    - Segmentation au pixel près par **Réseau U-Net** entraîné sur des vérités terrains d'experts.
    - Modélisation de la persistance temporelle par **HSMM (Hidden Semi-Markov Model)** pour éliminer les fausses alarmes sur pics fugitifs.
-5. **Comparaison critique & Discussion académique :** Mesure rigoureuse des performances (Dice, IoU, AUROC, Délais de détection) et analyse des compromis.""")
+5. **Comparaison critique & Discussion :** Mesure rigoureuse des performances (Dice, IoU, AUROC, Délais de détection) et analyse des compromis.""")
 
     # =========================================================================
     # ÉTAPE 1 : INSTALLATION & ENVIRONNEMENT
@@ -98,16 +98,22 @@ print(f"Environnement prêt ! PyTorch version : {torch.__version__} | Dispositif
     add_md("""---
 ## 🗂️ Étape 2 : Chargement et Détection Universelle des Données
 
-Ce notebook est conçu pour être **100% autonome et exécutable par n'importe qui (étudiant, professeur, encadrant, jury)** sans blocage :
-- Si vous avez cloné le dépôt GitHub (`!git clone ...`), les données sont déjà présentes.
-- Si vous avez monté un Google Drive contenant le dossier, il le détecte automatiquement.
-- Si vous exécutez le notebook sans données préalables, un module de simulation physique prend le relais pour illustrer rigoureusement chaque étape mathématique !""")
+Ce notebook est conçu pour être **100% autonome et exécutable  :
+- les données sont déjà présentes car j'ai cloné le dépôt GitHub.
+- au cas où,  Si ça ne marche pas , on peut monté un Google Drive contenant le dossier, il le détecte automatiquement.
+- Si on exécute le notebook sans données préalables, un module de simulation physique prend le relais pour illustrer rigoureusement chaque étape mathématique !""")
 
     add_code("""# =========================================================================
 # GESTION INTUITIVE ET AUTOMATIQUE DE L'ACCÈS AUX DONNÉES
 # =========================================================================
 import os
 import sys
+
+#lien depot github : https://github.com/Tsikomia/PROJET_THERMIQUE_2.git
+
+#clonage
+!git clone https://github.com/scideloandriasahy-bot/PROJET_THERMIQUE_2
+
 
 # Chemins de recherche ordonnés (local, repo cloné dans Colab, ou Drive)
 candidate_paths = [
@@ -152,7 +158,7 @@ if HAS_REAL_DATA:
 else:
     print("ℹ️ Données réelles non présentes dans ce dossier.")
     print("   👉 Le notebook utilisera des thermogrammes calibrés pour illustrer chaque formule.")
-    print("   👉 Pour cloner les données réelles : !git clone https://github.com/VOTRE_DEPOT/PROJET_THERMIQUE_2.git")""")
+    print("   👉 Pour cloner les données réelles : !git clone https://github.com/scideloandriasahy-bot/PROJET_THERMIQUE_2")""")
 
     # =========================================================================
     # ÉTAPE 3 : INTUITION PHYSIQUE & EXPLORATION VISUELLE
@@ -836,7 +842,7 @@ for t, score in enumerate(test_sequence_scores):
     add_md("""---
 ## 📊 Étape 11 : Synthèse Expérimentale & Comparaison des Deux Axes
 
-Conformément à la section 8 du cahier des charges, voici les résultats chiffrés obtenus par notre protocole rigoureux :
+ voici les résultats chiffrés obtenus par notre protocole rigoureux :
 
 | Métrique d'Évaluation | Baseline (Otsu / RF) | Axe 1 : MRF + HMM + Markov Absorbant | Axe 2 : U-Net + HSMM + CNN Contextuel |
 | :--- | :---: | :---: | :---: |
