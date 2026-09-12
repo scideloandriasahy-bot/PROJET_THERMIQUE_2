@@ -231,12 +231,31 @@ else:
         st.error("Aucune vérité terrain trouvée dans le dossier.")
         st.stop()
     
-    sample_labels = [f"Échantillon #{i+1} : {gt['id']} ({gt['condition']})" for i, gt in enumerate(gt_samples)]
+    # Séparation stricte Train / Test établie lors du benchmark (seed=42)
+    TEST_GT_IDS = {'284', 'f088', '201', '283', '249', '281', '162', '205', '322', 'r053'}
+    
+    gt_filter = st.sidebar.radio(
+        "Filtre de validation :",
+        ["🛡️ Test Set Indépendant (10 images jamais vues)", "Tous les 40 échantillons d'experts"]
+    )
+    
+    if "Test Set" in gt_filter:
+        displayed_gt = [gt for gt in gt_samples if gt['id'] in TEST_GT_IDS]
+    else:
+        displayed_gt = gt_samples
+    
+    sample_labels = [
+        f"{'🛡️ [TEST]' if gt['id'] in TEST_GT_IDS else '📘 [TRAIN]'} {gt['id']} ({gt['condition']})" 
+        for gt in displayed_gt
+    ]
     sample_idx = st.sidebar.selectbox("Choisir un échantillon expert :", range(len(sample_labels)), format_func=lambda i: sample_labels[i])
-    current_gt = gt_samples[sample_idx]
+    current_gt = displayed_gt[sample_idx]
+    is_test_sample = current_gt['id'] in TEST_GT_IDS
     img_bgr = current_gt['image_bgr']
     gt_mask_for_current = current_gt['mask']
-    image_title = f"Échantillon Expert : {current_gt['id']} | Condition d'origine : {current_gt['condition']}"
+    
+    status_tag = "🛡️ JEU DE TEST STRICT (Généralisation Pure - Jamais vu à l'entraînement)" if is_test_sample else "📘 JEU D'ENTRAÎNEMENT (Train Set)"
+    image_title = f"Échantillon Expert : {current_gt['id']} | Condition : {current_gt['condition']} | {status_tag}"
     # Simulation d'une trame pour le pipeline
     current_frame = {
         'filename': f"{current_gt['id']}.bmp",
